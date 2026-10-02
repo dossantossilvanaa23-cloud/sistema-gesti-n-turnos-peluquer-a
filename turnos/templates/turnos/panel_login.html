@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso administrador | Peluquería Mariela</title>
+    <style>
+        :root {
+            --fondo: #111;
+            --panel: #1d1d1d;
+            --campo: #292929;
+            --texto: #fff;
+            --secundario: #bbb;
+            --principal: #d9a7ff;
+            --borde: #39333e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: grid;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            place-items: center;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(217, 167, 255, .10), transparent 35%),
+                var(--fondo);
+            color: var(--texto);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        main {
+            width: min(100%, 420px);
+            padding: 38px;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            background: var(--panel);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+        }
+
+        .marca {
+            margin-bottom: 34px;
+            color: var(--secundario);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .marca span {
+            color: var(--principal);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .intro {
+            margin: 0 0 28px;
+            color: var(--secundario);
+            line-height: 1.5;
+        }
+
+        .grupo {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .campo {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #48434d;
+            border-radius: 6px;
+            outline: none;
+            background: var(--campo);
+            color: var(--texto);
+            font: inherit;
+        }
+
+        .campo:focus {
+            border-color: var(--principal);
+        }
+
+        button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 8px;
+            border: 0;
+            border-radius: 6px;
+            background: var(--principal);
+            color: #111;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .errores {
+            margin: 0 0 18px;
+            padding: 12px 14px;
+            border: 1px solid #6d3a49;
+            border-radius: 6px;
+            background: #321f27;
+            color: #ffc2cd;
+            font-size: 14px;
+        }
+
+        .errores ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        a {
+            color: var(--secundario);
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--principal);
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="marca">PELUQUERÍA <span>MARIELA</span></div>
+        <h1>Panel de administración</h1>
+        <p class="intro">Ingresá con tu cuenta de administrador para gestionar los turnos.</p>
+
+        {% if form.non_field_errors %}
+            <div class="errores" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <div class="grupo">
+                <label for="{{ form.username.id_for_label }}">Usuario</label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="errores">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="grupo">
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                {{ form.password }}
+                {% if form.password.errors %}<div class="errores">{{ form.password.errors }}</div>{% endif %}
+            </div>
+            <button type="submit">Ingresar al panel</button>
+        </form>
+
+        <footer><a href="{% url 'inicio' %}">Volver al sitio</a></footer>
+    </main>
+</body>
+</html>

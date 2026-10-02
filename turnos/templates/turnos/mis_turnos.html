@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis turnos | Peluquería Mariela</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --fondo: #111;
+            --panel: #1d1d1d;
+            --texto: #fff;
+            --secundario: #bbb;
+            --principal: #d9a7ff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 32px 20px;
+            background: var(--fondo);
+            color: var(--texto);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        main {
+            width: min(100%, 760px);
+            margin: 5vh auto;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            color: var(--principal);
+        }
+
+        .subtitulo,
+        .ayuda {
+            color: var(--secundario);
+        }
+
+        form,
+        .turno {
+            padding: 24px;
+            border: 1px solid #383838;
+            border-radius: 8px;
+            background: var(--panel);
+        }
+
+        form {
+            display: flex;
+            gap: 12px;
+            margin: 28px 0;
+        }
+
+        label {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        input,
+        button {
+            min-height: 48px;
+            padding: 12px 16px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            background: #292929;
+            color: var(--texto);
+        }
+
+        button {
+            border-color: var(--principal);
+            background: var(--principal);
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .lista {
+            display: grid;
+            gap: 12px;
+        }
+
+        .turno h2 {
+            margin: 0 0 14px;
+            font-size: 20px;
+        }
+
+        .datos {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 0;
+        }
+
+        dt {
+            margin-bottom: 4px;
+            color: var(--secundario);
+            font-size: 13px;
+        }
+
+        dd {
+            margin: 0;
+        }
+
+        .vacio {
+            padding: 20px 0;
+        }
+
+        a {
+            color: var(--principal);
+        }
+
+        @media (max-width: 520px) {
+            form {
+                flex-direction: column;
+            }
+
+            .datos {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Mis turnos</h1>
+        <p class="subtitulo">Consultá tus reservas con el teléfono que usaste al reservar.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <label for="telefono">Teléfono de la reserva</label>
+            <input
+                id="telefono"
+                name="telefono"
+                type="tel"
+                value="{{ telefono }}"
+                placeholder="Ej.: 3755691919"
+                required
+            >
+            <button type="submit">Buscar turnos</button>
+        </form>
+
+        {% if busqueda_realizada %}
+            {% if turnos %}
+                <div class="lista">
+                    {% for turno in turnos %}
+                        <article class="turno">
+                            <h2>Turno #{{ turno.id }} · {{ turno.servicio }}</h2>
+                            <dl class="datos">
+                                <div><dt>Nombre</dt><dd>{{ turno.nombre_cliente }}</dd></div>
+                                <div><dt>Fecha</dt><dd>{{ turno.fecha|date:"d/m/Y" }}</dd></div>
+                                <div><dt>Horario</dt><dd>{{ turno.hora|time:"H:i" }}</dd></div>
+                                <div><dt>Estado</dt><dd>{{ turno.estado }}</dd></div>
+                                <div><dt>Costo final</dt><dd>$ {{ turno.precio_servicio_formateado }}</dd></div>
+                            </dl>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="vacio">No encontramos turnos para ese teléfono.</p>
+            {% endif %}
+        {% endif %}
+
+        <p><a href="{% url 'inicio' %}">Volver al inicio</a></p>
+    </main>
+</body>
+</html>

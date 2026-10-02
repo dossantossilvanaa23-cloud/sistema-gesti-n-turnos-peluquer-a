@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante de turno</title>
+    <style>
+        :root {
+            --principal: #d9a7ff;
+            --texto: #fff;
+            --secundario: #bbb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: grid;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            place-items: center;
+            background: #111;
+            color: var(--texto);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .comprobante {
+            width: min(100%, 520px);
+            padding: 36px;
+            border: 1px solid #383838;
+            border-radius: 18px;
+            background: #1d1d1d;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: var(--principal);
+        }
+
+        .mensaje {
+            margin: 0 0 28px;
+            color: var(--secundario);
+        }
+
+        .datos {
+            display: grid;
+            gap: 16px;
+            margin: 0;
+        }
+
+        .dato {
+            padding-bottom: 12px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        dt {
+            margin-bottom: 4px;
+            color: var(--secundario);
+            font-size: 13px;
+        }
+
+        dd {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button,
+        a {
+            flex: 1;
+            padding: 13px 18px;
+            border: 0;
+            border-radius: 24px;
+            background: var(--principal);
+            color: #111;
+            font: inherit;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        a {
+            background: #333;
+            color: var(--texto);
+        }
+
+        @media print {
+            body {
+                min-height: auto;
+                padding: 0;
+                background: #fff;
+                color: #000;
+            }
+
+            .comprobante {
+                width: 100%;
+                border: 0;
+                background: #fff;
+            }
+
+            .acciones {
+                display: none;
+            }
+
+            h1,
+            dt {
+                color: #000;
+            }
+
+            .mensaje {
+                color: #444;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="comprobante">
+        <h1>Turno reservado</h1>
+        <p class="mensaje">Presentá este comprobante el día de tu cita.</p>
+
+        <dl class="datos">
+            <div class="dato">
+                <dt>Número de turno</dt>
+                <dd>#{{ turno.id }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Nombre</dt>
+                <dd>{{ turno.nombre_cliente }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Teléfono</dt>
+                <dd>{{ turno.telefono }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Servicio</dt>
+                <dd>{{ turno.servicio }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Costo final</dt>
+                <dd>$ {{ turno.precio_servicio_formateado }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Fecha</dt>
+                <dd>{{ turno.fecha|date:"d/m/Y" }}</dd>
+            </div>
+            <div class="dato">
+                <dt>Horario</dt>
+                <dd>{{ turno.hora|time:"H:i" }}</dd>
+            </div>
+        </dl>
+
+        <div class="acciones">
+            <button type="button" onclick="window.print()">Imprimir comprobante</button>
+            <a href="{% url 'inicio' %}">Volver</a>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener("load", function () {
+            window.print();
+        });
+    </script>
+</body>
+</html>

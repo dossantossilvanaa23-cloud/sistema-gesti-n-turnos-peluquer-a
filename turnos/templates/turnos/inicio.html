@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema Turnos Mariela - Peluquería</title>
+
+    <style>
+        :root {
+            --fondo: #111;
+            --fondo-secundario: #181818;
+            --tarjeta: #222;
+            --campo: #292929;
+            --texto: #fff;
+            --texto-secundario: #bbb;
+            --principal: #d9a7ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--fondo);
+            color: var(--texto);
+        }
+
+        section {
+            padding: 100px 8%;
+            scroll-margin-top: 75px;
+        }
+
+        /* Navegación */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            width: 100%;
+            padding: 18px 7%;
+
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--principal);
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .menu a {
+            color: var(--texto);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: var(--principal);
+        }
+
+        .btn-nav,
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+
+            border-radius: 25px;
+
+            background: var(--principal);
+            color: #111;
+            text-decoration: none;
+            font-weight: bold;
+
+            transition:
+                transform 0.3s,
+                background-color 0.3s;
+        }
+
+        .btn-nav:hover,
+        .btn:hover {
+            background: #fff;
+            color: #111;
+            transform: translateY(-3px);
+        }
+
+        /* Portada */
+
+        .hero {
+            display: flex;
+            align-items: center;
+
+            min-height: 100vh;
+            padding: 100px 8% 60px;
+
+            background:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.65),
+                    rgba(0, 0, 0, 0.75)
+                ),
+                url("[images.unsplash.com](https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1600&q=80)");
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            margin-bottom: 25px;
+            font-size: clamp(45px, 7vw, 85px);
+            line-height: 0.95;
+        }
+
+        .hero h1 span {
+            color: var(--principal);
+        }
+
+        .hero p {
+            margin-bottom: 35px;
+            color: #ddd;
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 30px;
+        }
+
+        /* Títulos */
+
+        .titulo {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .titulo h2 {
+            margin-bottom: 15px;
+            font-size: clamp(34px, 5vw, 45px);
+        }
+
+        .titulo p {
+            color: #aaa;
+            font-size: 17px;
+        }
+
+        /* Servicios */
+
+        .servicios {
+            background: var(--fondo-secundario);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            padding: 35px 25px;
+            border-radius: 18px;
+
+            background: var(--tarjeta);
+            text-align: center;
+
+            transition:
+                transform 0.3s,
+                background-color 0.3s;
+        }
+
+        .card:hover {
+            background: #292929;
+            transform: translateY(-8px);
+        }
+
+        .icono {
+            margin-bottom: 20px;
+            font-size: 45px;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 23px;
+        }
+
+        .card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .precio {
+            display: block;
+            margin-top: 20px;
+
+            color: var(--principal);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Reservas */
+
+        .reserva {
+            background: #101010;
+        }
+
+        .formulario {
+            max-width: 700px;
+            margin: auto;
+            padding: 40px;
+
+            border-radius: 20px;
+            background: #1d1d1d;
+        }
+
+        .form-grupo {
+            margin-bottom: 20px;
+        }
+
+        .form-grupo label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-grupo input,
+        .form-grupo select {
+            width: 100%;
+            padding: 14px;
+
+            border: 1px solid transparent;
+            border-radius: 10px;
+            outline: none;
+
+            background: var(--campo);
+            color: var(--texto);
+            font: inherit;
+        }
+
+        .form-grupo input:focus,
+        .form-grupo select:focus {
+            border-color: var(--principal);
+        }
+
+        .form-grupo input[type="date"] {
+            color-scheme: dark;
+        }
+
+        .formulario button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 15px;
+
+            border: none;
+            border-radius: 30px;
+
+            background: var(--principal);
+            color: #111;
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+            transition:
+                background-color 0.3s,
+                transform 0.3s;
+        }
+
+        .formulario button:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* Nosotros */
+
+        .nosotros {
+            background: var(--fondo-secundario);
+        }
+
+        .nosotros-contenido {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .nosotros-imagen {
+            min-height: 400px;
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.25),
+                    rgba(0, 0, 0, 0.4)
+                ),
+                url("[images.unsplash.com](https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80)");
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .nosotros-texto h2 {
+            margin-bottom: 25px;
+            font-size: clamp(34px, 5vw, 45px);
+        }
+
+        .nosotros-texto p {
+            margin-bottom: 20px;
+            color: var(--texto-secundario);
+            line-height: 1.8;
+        }
+
+        /* Testimonios */
+
+        .testimonios {
+            background: #101010;
+        }
+
+        .testimonio {
+            padding: 30px;
+            border-radius: 18px;
+            background: #1e1e1e;
+        }
+
+        .testimonio p {
+            margin-bottom: 20px;
+            color: #ccc;
+            line-height: 1.7;
+        }
+
+        .estrellas {
+            margin-bottom: 10px;
+            color: var(--principal);
+            font-size: 20px;
+        }
+
+        /* Contacto */
+
+        .contacto {
+            background: var(--fondo-secundario);
+            text-align: center;
+        }
+
+        .contacto-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+
+            margin: 40px 0;
+        }
+
+        .contacto-item {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .contacto-item strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--texto);
+        }
+
+        .whatsapp {
+            background: #25d366;
+            color: #071d0f;
+        }
+
+        /* Pie de página */
+
+        footer {
+            padding: 30px;
+            background: #080808;
+            color: #777;
+            text-align: center;
+        }
+
+        /* Diseño móvil */
+
+        @media (max-width: 800px) {
+            nav {
+                padding: 15px 5%;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .menu {
+                display: none;
+            }
+
+            .btn-nav {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding-right: 6%;
+                padding-left: 6%;
+            }
+
+            section {
+                padding: 70px 6%;
+            }
+
+            .nosotros-contenido {
+                grid-template-columns: 1fr;
+            }
+
+            .nosotros-imagen {
+                min-height: 300px;
+            }
+
+            .formulario {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            Sistema <span>Turnos Mariela</span>
+        </div>
+
+        <ul class="menu">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#reservas">Reservas</a></li>
+            <li><a href="{% url 'mis_turnos' %}">Mis turnos</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+
+        <a href="#reservas" class="btn-nav">Reservar</a>
+    </nav>
+
+    <main>
+        <!-- Portada -->
+
+        <section class="hero" id="inicio">
+            <div class="hero-content">
+                <h1>
+                    ¡Te merecés
+                    <span>este look!</span>
+                </h1>
+
+                <p>
+                    Renová tu estilo y disfrutá una experiencia pensada
+                    especialmente para vos.
+                </p>
+
+                <a href="#reservas" class="btn">
+                    Reservar turno &rarr;
+                </a>
+            </div>
+        </section>
+
+        <!-- Servicios -->
+
+        <section class="servicios" id="servicios">
+            <div class="titulo">
+                <h2>Nuestros servicios</h2>
+                <p>Todo lo que necesitás para renovar tu look.</p>
+            </div>
+
+            <div class="cards">
+                <article class="card">
+                    <div class="icono">✂️</div>
+                    <h3>Corte</h3>
+                    <p>Cortes modernos y personalizados.</p>
+                    <span class="precio">$8.000</span>
+                </article>
+
+                <article class="card">
+                    <div class="icono">🎨</div>
+                    <h3>Color</h3>
+                    <p>Coloración y cambios de look.</p>
+                    <span class="precio">$15.000</span>
+                </article>
+
+                <article class="card">
+                    <div class="icono">💇‍♀️</div>
+                    <h3>Peinado</h3>
+                    <p>Peinados para eventos y ocasiones especiales.</p>
+                    <span class="precio">$10.000</span>
+                </article>
+
+                <article class="card">
+                    <div class="icono">✨</div>
+                    <h3>Tratamientos</h3>
+                    <p>Tratamientos para cuidar y recuperar tu cabello.</p>
+                    <span class="precio">$12.000</span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Reservas -->
+
+        <section class="reserva" id="reservas">
+            <div class="titulo">
+                <h2>Reservá tu turno</h2>
+                <p>Elegí el servicio, la fecha y el horario.</p>
+            </div>
+
+            <form class="formulario" id="formTurno"  method="POST">
+                {% csrf_token %}
+                <div class="form-grupo">
+                    <label for="nombre">Nombre completo</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingresá tu nombre"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+            
+                         <div class="form-grupo">
+                  <label for="telefono">Teléfono:</label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="Tu teléfono" required>
+                 </div>
+                    
+                
+
+                <div class="form-grupo">
+                    <label for="servicio">Servicio</label>
+                    <select id="servicio" name="servicio" required>
+                        <option value="" selected disabled>
+                            Seleccionar servicio
+                        </option>
+                        <option value="Corte">Corte</option>
+                        <option value="Color">Color</option>
+                        <option value="Peinado">Peinado</option>
+                        <option value="Tratamiento">Tratamiento</option>
+                    </select>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="fecha">Fecha</label>
+                    <input
+                        type="date"
+                        id="fecha"
+                        name="fecha"
+                        required
+                    >
+                </div>
+
+                <div class="form-grupo">
+                    <label for="hora">Horario</label>
+                    <select id="hora" name="hora" required>
+                        <option value="" selected disabled>
+                            Seleccionar horario
+                        </option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Reservar
+                </button>
+            </form>
+            <p class="titulo"><a href="{% url 'mis_turnos' %}">Consultar mis turnos</a></p>
+        </section>
+
+        <!-- Nosotros -->
+
+        <section class="nosotros" id="nosotros">
+            <div class="nosotros-contenido">
+                <div
+                    class="nosotros-imagen"
+                    role="img"
+                    aria-label="Interior de Peluquería Mariela"
+                ></div>
+
+                <div class="nosotros-texto">
+                    <h2>Sobre nosotros</h2>
+
+                    <p>
+                        En Peluquería Mariela ofrecemos atención personalizada,
+                        cuidando cada detalle para que te sientas cómoda y segura.
+                    </p>
+
+                    <p>
+                        Trabajamos para realzar tu estilo y brindarte una
+                        experiencia agradable en cada visita.
+                    </p>
+
+                    <a href="#reservas" class="btn">Reservar turno</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+
+        <section class="testimonios" id="testimonios">
+            <div class="titulo">
+                <h2>Lo que dicen nuestras clientas</h2>
+                <p>Experiencias en Peluquería Mariela.</p>
+            </div>
+
+            <div class="cards">
+                <article class="testimonio">
+                    <div class="estrellas">★★★★★</div>
+                    <p>
+                        "Excelente atención. Mariela entendió exactamente
+                        el cambio de look que quería."
+                    </p>
+                    <strong>Laura</strong>
+                </article>
+
+                <article class="testimonio">
+                    <div class="estrellas">★★★★★</div>
+                    <p>
+                        "Muy lindo ambiente y un resultado increíble.
+                        Volvería sin dudarlo."
+                    </p>
+                    <strong>Carolina</strong>
+                </article>
+
+                <article class="testimonio">
+                    <div class="estrellas">★★★★★</div>
+                    <p>
+                        "Me encantó el corte y la atención personalizada.
+                        Totalmente recomendable."
+                    </p>
+                    <strong>Sofía</strong>
+                </article>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+
+        <section class="contacto" id="contacto">
+            <div class="titulo">
+                <h2>Contacto</h2>
+                <p>Comunicate con nosotros para reservar tu turno.</p>
+            </div>
+
+            <div class="contacto-info">
+                <div class="contacto-item">
+                    <strong>Dirección</strong>
+                    Av. Picada Argentina - Barrio San José<br>
+                    Oberá, Misiones
+                </div>
+
+                <div class="contacto-item">
+                    <strong>Teléfono</strong>
+                    3755 69-1919
+                </div>
+
+                <div class="contacto-item">
+                    <strong>Horarios</strong>
+                    Lunes a sábado<br>
+                    09:00 a 18:00
+                
+            </div>
+
+            <div class="btn whatsapp" id="btnWhatsApp">
+    <a href="https://wa.me/543755691919" target="_blank" rel="noopener noreferrer">
+        Contactar por WhatsApp
+    </a>
+</div>
+    
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Peluquería Mariela. Todos los derechos reservados.</p>
+        <p><a href="{% url 'panel_login' %}">Acceso administrador</a></p>
+    </footer>
+    <script>
+    const formulario = document.getElementById("formTurno");
+    const fechaInput = document.getElementById("fecha");
+
+    function obtenerFechaLocal() {
+        const hoy = new Date();
+        const anio = hoy.getFullYear();
+        const mes = String(hoy.getMonth() + 1).padStart(2, "0");
+        const dia = String(hoy.getDate()).padStart(2, "0");
+
+        return `${anio}-${mes}-${dia}`;
+    }
+
+    function formatearFecha(fecha) {
+        const [anio, mes, dia] = fecha.split("-");
+        return `${dia}/${mes}/${anio}`;
+    }
+
+    fechaInput.min = obtenerFechaLocal();
+
+    formulario.addEventListener("submit", function (evento) {
+
+        if (!formulario.checkValidity()) {
+            evento.preventDefault();
+            formulario.reportValidity();
+            return;
+        }
+
+        const nombre = document.getElementById("nombre").value.trim();
+        const servicio = document.getElementById("servicio").value;
+        const fecha = document.getElementById("fecha").value;
+        const hora = document.getElementById("hora").value;
+
+        const mensaje = [
+            "Hola Mariela, quiero solicitar un turno.",
+            "",
+            `Nombre: ${nombre}`,
+            `Servicio: ${servicio}`,
+            `Fecha: ${formatearFecha(fecha)}`,
+            `Horario: ${hora}`
+        ].join("\n");
+
+        const telefono = "543755691919";
+        const urlWhatsApp =
+            "https://wa.me/" + telefono +
+            "?text=" + encodeURIComponent(mensaje);
+
+        // Guardamos primero el turno en Django.
+        // Después podremos hacer que también abra WhatsApp.
+    });
+</script>
+
+   
+</body>
+</html>
